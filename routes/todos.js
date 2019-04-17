@@ -44,9 +44,60 @@ router.post("/", function(req, res, next) {
 });
 
 /* update todo. */
-router.put("/:id", function(req, res, next) {});
+
+router.put("/:id", function(req, res, next) {
+  const todo_id = req.params.id;
+
+  const { title, description } = req.body;
+
+  model.Todo.update(
+    {
+      title: title,
+      description: description
+    },
+    {
+      where: {
+        id: todo_id
+      }
+    }
+  )
+    .then(todo =>
+      res.json({
+        error: false,
+        message: "todo has been updated."
+      })
+    )
+    .catch(error =>
+      res.json({
+        error: true,
+        error: error
+      })
+    );
+});
 
 /* GET todo listing. */
-router.delete("/:id", function(req, res, next) {});
+
+/* Delete todo. */
+router.delete("/:id", function(req, res, next) {
+  const todo_id = req.params.id;
+
+  model.Todo.destroy({
+    where: {
+      id: todo_id
+    }
+  })
+    .then(status =>
+      res.json({
+        error: false,
+        message: "todo has been delete."
+      })
+    )
+    .catch(error =>
+      res.json({
+        error: true,
+        error: error
+      })
+    );
+});
 
 module.exports = router;
